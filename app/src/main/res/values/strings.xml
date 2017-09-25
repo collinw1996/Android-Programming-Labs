@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">COSC431_Labs</string>
+    <string name="app_name">Lab3_CollinWoodruff</string>
+    <string name="name">Name:</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="delete">Delete</string>
+    <string name="track">Track:</string>
+    <string name="artist">Artist</string>
+    <string name="toggle">Is Awesome</string>
+    <string name="empty">No Songs Available</string>
 </resources>
