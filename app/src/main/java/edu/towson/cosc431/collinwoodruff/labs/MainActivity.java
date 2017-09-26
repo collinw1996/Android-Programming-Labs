@@ -3,6 +3,7 @@ package edu.towson.cosc431.collinwoodruff.labs;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         previous.setOnClickListener(this);
         next.setOnClickListener(this);
         empty = (TextView)findViewById(R.id.empty);
-        songView = new SongView(this, (ConstraintLayout)findViewById(R.id.song));
+        songView = new SongView(this, (LinearLayout)findViewById(R.id.song));
         display();
     }
 
