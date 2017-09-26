@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void addSongs(){
         songs.add(new Song("Fugue", "Gould", 1));
+        songs.add(new Song("Photograph", "Def Leppard", 2));
+        songs.add(new Song("OMG", "Vic Mensa", 3));
     }
 
     @Override
