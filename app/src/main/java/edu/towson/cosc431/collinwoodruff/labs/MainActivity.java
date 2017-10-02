@@ -1,9 +1,8 @@
 package edu.towson.cosc431.collinwoodruff.labs;
 
-import android.support.constraint.ConstraintLayout;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +17,10 @@ import edu.towson.cosc431.collinwoodruff.labs.view.SongView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Controller {
 
+    public static final int ADD_SONG_REQUEST_CODE = 1;
+    public static final int EDIT_SONG_REQUEST_CODE = 2;
+    public static final String TAG = MainActivity.class.getSimpleName();
+
     List<Song> songs;
     int current;
 
@@ -25,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView empty;
     Button previous;
     Button next;
+    Button add;
+    boolean flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +44,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void actions(){
         previous = (Button)findViewById(R.id.previousButton);
         next = (Button)findViewById(R.id.nextButton);
+        add = (Button)findViewById(R.id.addBtn);
         previous.setOnClickListener(this);
         next.setOnClickListener(this);
+        add.setOnClickListener(this);
         empty = (TextView)findViewById(R.id.empty);
         songView = new SongView(this, (LinearLayout)findViewById(R.id.song));
         display();
     }
 
     private void addSongs(){
-        songs.add(new Song("Fugue", "Gould", 1));
-        songs.add(new Song("Photograph", "Def Leppard", 2));
-        songs.add(new Song("OMG", "Vic Mensa", 3));
+        songs.add(new Song("Fugue", "Gould", 1, true));
+        songs.add(new Song("Photograph", "Def Leppard", 2, false));
+        songs.add(new Song("OMG", "Vic Mensa", 3, false));
     }
 
     @Override
@@ -60,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.nextButton:
                 next();
+                break;
+            case R.id.addBtn:
+                addSong();
                 break;
         }
     }
@@ -107,5 +117,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Song currentSong = songs.get(current);
         currentSong.toggleAwesome();
         Log.d("Tag", currentSong.getName() + " is awesome?" + currentSong.isAwesome());
+    }
+
+    @Override
+    public void addSong() {
+        Intent addIntent = new Intent(this, AddSong.class);
+        startActivityForResult(addIntent, ADD_SONG_REQUEST_CODE);
+    }
+
+    public void editSong(){
+        Intent saveIntent = new Intent(this, AddSong.class);
+        startActivityForResult(saveIntent, ADD_SONG_REQUEST_CODE);
+    }
+
+    public void newSong(Intent data) {
+        Song song = (Song)data.getSerializableExtra("SONG");
+        songs.add(new Song(song.getName(),song.getArtist(),song.getTrack(),song.isAwesome()));
+
+    }
+
+    public void saveSong(Intent data){
+        Song song = (Song)data.getSerializableExtra("SONG");
+        songs.set(current, new Song (song.getName(),song.getArtist(), song.getTrack(), song.isAwesome()));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case ADD_SONG_REQUEST_CODE:
+                    newSong(data);
+                    break;
+            }
+        }
     }
 }

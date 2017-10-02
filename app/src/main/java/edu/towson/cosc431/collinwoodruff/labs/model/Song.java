@@ -1,19 +1,26 @@
 package edu.towson.cosc431.collinwoodruff.labs.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Collin on 9/24/2017.
  */
 
-public class Song {
+public class Song implements Serializable{
     private String name;
     private String artist;
     private int track;
     private boolean isAwesome;
 
-    public Song(String name, String artist, int track){
+    public Song(String name, String artist, int track, boolean isAwesome){
         this.name = name;
         this.artist = artist;
         this.track = track;
+        this.isAwesome = isAwesome;
+    }
+
+    public Song(){
+
     }
 
     public String getName() {

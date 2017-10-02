@@ -1,5 +1,7 @@
 package edu.towson.cosc431.collinwoodruff.labs.view;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
+import edu.towson.cosc431.collinwoodruff.labs.AddSong;
 import edu.towson.cosc431.collinwoodruff.labs.Controller;
 import edu.towson.cosc431.collinwoodruff.labs.R;
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
@@ -36,6 +39,13 @@ public class SongView {
         this.controller = controller;
         this.layout = layout;
         this.name = (TextView) layout.findViewById(R.id.songName);
+        this.name.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                SongView.this.controller.editSong();
+            }
+        });
         this.artist = (TextView) layout.findViewById(R.id.songArtist);
         this.track = (TextView) layout.findViewById(R.id.songTrack);
         this.awesome = (CheckBox) layout.findViewById(R.id.isAwesome);
