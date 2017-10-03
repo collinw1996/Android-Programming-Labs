@@ -126,8 +126,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void editSong(){
-        Intent saveIntent = new Intent(this, AddSong.class);
-        startActivityForResult(saveIntent, ADD_SONG_REQUEST_CODE);
+        Intent saveIntent = new Intent(this, EditSong.class);
+        Song currentSong = songs.get(current);
+        saveIntent.putExtra("EDIT" , currentSong);
+        startActivityForResult(saveIntent, EDIT_SONG_REQUEST_CODE);
     }
 
     public void newSong(Intent data) {
@@ -137,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void saveSong(Intent data){
-        Song song = (Song)data.getSerializableExtra("SONG");
+        Song song = (Song)data.getSerializableExtra("EDIT");
         songs.set(current, new Song (song.getName(),song.getArtist(), song.getTrack(), song.isAwesome()));
     }
 
@@ -148,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switch (requestCode) {
                 case ADD_SONG_REQUEST_CODE:
                     newSong(data);
+                    break;
+                case EDIT_SONG_REQUEST_CODE:
+                    saveSong(data);
                     break;
             }
         }

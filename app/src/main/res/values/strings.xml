@@ -11,4 +11,5 @@
     <string name="addSong">Add Song</string>
     <string name="newSong">New Song</string>
     <string name="saveSong">Save Song</string>
+    <string name="editSong">Edit Song</string>
 </resources>
