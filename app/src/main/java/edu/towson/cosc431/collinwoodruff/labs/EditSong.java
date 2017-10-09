@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import java.util.List;
+import java.util.Locale;
 
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
 
@@ -44,11 +45,11 @@ public class EditSong extends AppCompatActivity implements View.OnClickListener,
         awesome = (CheckBox)findViewById(R.id.isAwesome);
 
         Intent intent = getIntent();
-        Song song = (Song)intent.getSerializableExtra("EDIT");
+        Song song = intent.getParcelableExtra("EDIT");
 
         songName.setText(song.getName());
         artistName.setText(song.getArtist());
-        trackNum.setText(Integer.toString(song.getTrack()));
+        trackNum.setText(String.format(Locale.US, "%d", song.getTrack()));
         awesome.setChecked(song.isAwesome());
 
         addBtn.setOnClickListener(this);
@@ -59,18 +60,26 @@ public class EditSong extends AppCompatActivity implements View.OnClickListener,
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.addBtn:
-                song.setName(songName.getText().toString());
-                song.setArtist(artistName.getText().toString());
-                song.setTrack(Integer.parseInt(trackNum.getText().toString()));
-                song.setAwesome(flag);
+                if(songName.getText().toString().isEmpty()){
+                    song.setName("Song Name");
+                }
+                else
+                    song.setName(songName.getText().toString());
+                if(artistName.getText().toString().isEmpty()){
+                    song.setArtist("Artist Name");
+                }
+                else
+                    song.setArtist(artistName.getText().toString());
+                if(trackNum.getText().toString().isEmpty()){
+                    song.setTrack(0);
+                }
+                else
+                    song.setTrack(Integer.parseInt(trackNum.getText().toString()));
+                song.setAwesome(song.isAwesome());
                 editSong(song);
                 break;
             case R.id.isAwesome:
-                song.toggleAwesome();
-                if(flag)
-                    flag = false;
-                else
-                    flag = true;
+                song.setAwesome(!song.isAwesome());
                 break;
         }
     }

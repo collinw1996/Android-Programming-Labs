@@ -8,12 +8,10 @@ import edu.towson.cosc431.collinwoodruff.labs.model.Song;
  */
 
 public interface Controller {
-    void next();
-    void prev();
     void delete(Song song);
-    void toggle();
     void addSong();
     void newSong(Intent data);
-    void editSong();
+    void editSong(Song song);
     void saveSong(Intent data);
+    void logSongs();
 }

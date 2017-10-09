@@ -46,18 +46,26 @@ public class AddSong extends AppCompatActivity implements View.OnClickListener, 
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.addBtn:
-                song.setName(songName.getText().toString());
-                song.setArtist(artistName.getText().toString());
-                song.setTrack(Integer.parseInt(trackNum.getText().toString()));
-                song.setAwesome(flag);
+                if(songName.getText().toString().isEmpty()){
+                    song.setName("Song Name");
+                }
+                else
+                    song.setName(songName.getText().toString());
+                if(artistName.getText().toString().isEmpty()){
+                    song.setArtist("Artist Name");
+                }
+                else
+                    song.setArtist(artistName.getText().toString());
+                if(trackNum.getText().toString().isEmpty()){
+                    song.setTrack(0);
+                }
+                else
+                    song.setTrack(Integer.parseInt(trackNum.getText().toString()));
+                song.setAwesome(song.isAwesome());
                 saveSong(song);
                 break;
             case R.id.isAwesome:
-                song.toggleAwesome();
-                if(flag)
-                    flag = false;
-                else
-                    flag = true;
+                song.setAwesome(!song.isAwesome());
                 break;
         }
     }
