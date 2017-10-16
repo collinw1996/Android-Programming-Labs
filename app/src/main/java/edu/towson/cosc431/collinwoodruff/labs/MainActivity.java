@@ -1,6 +1,7 @@
 package edu.towson.cosc431.collinwoodruff.labs;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,100 +16,77 @@ import java.util.List;
 import edu.towson.cosc431.collinwoodruff.labs.adapter.SongAdapter;
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, Controller {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, IView {
 
     private static final int ADD_SONG_REQUEST_CODE = 1;
     private static final int EDIT_SONG_REQUEST_CODE = 2;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
-    private SongAdapter adapter;
-    List<Song> songs;
     RecyclerView recyclerView;
     Button addBtn;
-    int position;
-    boolean flag;
+    private SongAdapter adapter;
+    IPresenter presenter;
+    Song song;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        songs = new ArrayList<>();
-        addSongs();
-        actions();
+        presenter = new MainPresenter(this, new SongsModel());
+        bindView();
     }
 
-    private void actions(){
+    private void bindView() {
         addBtn = (Button)findViewById(R.id.addBtn);
         addBtn.setOnClickListener(this);
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SongAdapter(songs, (Controller)this);
+        adapter = new SongAdapter(presenter.getSongsFromModel(), presenter);
         recyclerView.setAdapter(adapter);
-    }
-
-    private void addSongs(){
-        songs.add(new Song("Fugue", "Gould", 1, true));
-        songs.add(new Song("Photograph", "Def Leppard", 2, false));
-        songs.add(new Song("OMG", "Vic Mensa", 3, false));
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch(view.getId()) {
             case R.id.addBtn:
-                addSong();
+                presenter.launchAddSongActivity();
                 break;
         }
     }
 
-    public void logSongs(){
-        for(Song song : songs)
-            Log.d("Tag", song.toString());
-    }
-
     @Override
-    public void delete(Song song) {
-        songs.remove(song);
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void addSong() {
-        Intent addIntent = new Intent(this, AddSong.class);
-        startActivityForResult(addIntent, ADD_SONG_REQUEST_CODE);
-    }
-
-    public void editSong(Song song){
-        Intent saveIntent = new Intent(this, EditSong.class);
-        saveIntent.putExtra("EDIT" , song);
-        startActivityForResult(saveIntent, EDIT_SONG_REQUEST_CODE);
-        position = songs.indexOf(song);
-    }
-
-    public void newSong(Intent data) {
-        Song song = data.getParcelableExtra("SONG");
-        songs.add(new Song(song.getName(),song.getArtist(),song.getTrack(),song.isAwesome()));
-        adapter.notifyDataSetChanged();
-
-    }
-
-    public void saveSong(Intent data){
-        Song song = data.getParcelableExtra("EDIT");
-        songs.set(position, new Song (song.getName(),song.getArtist(), song.getTrack(), song.isAwesome()));
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_SONG_REQUEST_CODE:
-                    newSong(data);
+                    song = (Song)data.getParcelableExtra("SONG");
+                    presenter.handleNewSongResult(song);
+                    refresh();
                     break;
                 case EDIT_SONG_REQUEST_CODE:
-                    saveSong(data);
+                    song = (Song) data.getParcelableExtra("EDIT");
+                    presenter.handleEditSongResult(song);
                     break;
             }
         }
+    }
+
+    @Override
+    public void refresh() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void launchNewSong() {
+        Intent intent = new Intent(this, AddSong.class);
+        startActivityForResult(intent, ADD_SONG_REQUEST_CODE);
+    }
+
+    @Override
+    public void launchEditSong(Song song){
+        Intent intent = new Intent(this, EditSong.class);
+        intent.putExtra("EDIT" , song);
+        startActivityForResult(intent, EDIT_SONG_REQUEST_CODE);
     }
 }

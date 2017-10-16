@@ -16,10 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddSong"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".EditSong"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".AddSong"></activity>
+        <activity android:name=".EditSong"></activity>
     </application>
 
 </manifest>

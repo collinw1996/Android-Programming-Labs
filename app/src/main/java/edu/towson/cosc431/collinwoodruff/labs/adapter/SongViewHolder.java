@@ -8,52 +8,52 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-import edu.towson.cosc431.collinwoodruff.labs.Controller;
+import edu.towson.cosc431.collinwoodruff.labs.IPresenter;
 import edu.towson.cosc431.collinwoodruff.labs.R;
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
 
 public class SongViewHolder extends RecyclerView.ViewHolder {
-    TextView songName;
-    TextView songArtist;
-    TextView trackNum;
-    CheckBox isAwesome;
+    TextView songNameTv;
+    TextView artistNameTv;
+    TextView trackNumTv;
+    CheckBox awesomeCb;
     Song song;
-    Button deleteBtn;
-    Controller controller;
+    Button delBtn;
+    IPresenter controller;
 
-    public SongViewHolder(View itemView, final Controller controller) {
+    public SongViewHolder(View itemView, final IPresenter contoller) {
         super(itemView);
-        this.controller = controller;
-        songName = (TextView) itemView.findViewById(R.id.songName);
-        songName.setOnClickListener(new View.OnClickListener() {
+        this.controller = contoller;
+        songNameTv = (TextView)itemView.findViewById(R.id.songName);
+        songNameTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SongViewHolder.this.controller.editSong(song);
+                SongViewHolder.this.controller.launchEditSong(song);
             }
         });
-        songArtist = (TextView)itemView.findViewById(R.id.songArtist);
-        trackNum = (TextView)itemView.findViewById(R.id.songTrack);
-        isAwesome = (CheckBox) itemView.findViewById(R.id.isAwesome);
-        isAwesome.setOnClickListener(new View.OnClickListener() {
+        artistNameTv = (TextView)itemView.findViewById(R.id.songArtist);
+        trackNumTv = (TextView)itemView.findViewById(R.id.songTrack);
+        awesomeCb = (CheckBox) itemView.findViewById(R.id.isAwesome);
+        awesomeCb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 song.setAwesome(!song.isAwesome());
             }
         });
-        deleteBtn = (Button) itemView.findViewById(R.id.deleteButton);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
+        delBtn = (Button)itemView.findViewById(R.id.deleteButton);
+        delBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SongViewHolder.this.controller.delete(song);
+                SongViewHolder.this.controller.deleteSong(song);
             }
         });
     }
 
     public void bindSong(Song song) {
-        songName.setText(song.getName());
-        songArtist.setText(song.getArtist());
-        trackNum.setText(String.format(Locale.US, "%d", song.getTrack()));
-        isAwesome.setChecked(song.isAwesome());
+        songNameTv.setText(song.getName());
+        artistNameTv.setText(song.getArtist());
+        trackNumTv.setText(String.format(Locale.US, "%d", song.getTrack()));
+        awesomeCb.setChecked(song.isAwesome());
         this.song = song;
     }
 }

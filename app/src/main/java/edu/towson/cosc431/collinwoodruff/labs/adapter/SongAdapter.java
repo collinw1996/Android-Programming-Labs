@@ -7,15 +7,16 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import edu.towson.cosc431.collinwoodruff.labs.Controller;
+import edu.towson.cosc431.collinwoodruff.labs.IPresenter;
 import edu.towson.cosc431.collinwoodruff.labs.R;
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
 
 public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
 
     List<Song> songs;
-    Controller controller;
-    public SongAdapter(List<Song> songs, Controller controller) {
+    IPresenter controller;
+
+    public SongAdapter(List<Song> songs, IPresenter controller) {
         this.songs = songs;
         this.controller = controller;
     }
@@ -24,8 +25,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
     public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.song, parent, false);
-        SongViewHolder viewHolder = new SongViewHolder(view, controller);
-        return viewHolder;
+        SongViewHolder vh = new SongViewHolder(view, controller);
+        return vh;
     }
 
     @Override
