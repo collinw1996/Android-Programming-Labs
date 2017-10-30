@@ -12,37 +12,29 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.towson.cosc431.collinwoodruff.models.Person;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PersonFragment extends Fragment {
+    Person person;
+    TextView nameTv;
+    TextView ageTv;
 
-    TextView name;
-    TextView age;
-
-    public PersonFragment() {
-        // Required empty public constructor
-    }
-
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.person_fragment, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.person_fragment, container, false);
+        nameTv = view.findViewById(R.id.name);
+        ageTv = view.findViewById(R.id.age);
+        return view;
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        name = getActivity().findViewById(R.id.name);
-        age = getActivity().findViewById(R.id.age);
+    public void setPerson(Person person) {
+        this.person = person;
+        nameTv.setText(person.getName());
+        ageTv.setText(Integer.toString(person.getAge()));
     }
-
-    public void person(int position, ArrayList<String> person, ArrayList<String> age){
-        name.setText(person.get(position));
-        this.age.setText(String.valueOf(age.get(position)));
-    }
-
 }

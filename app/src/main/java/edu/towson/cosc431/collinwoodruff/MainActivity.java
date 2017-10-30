@@ -7,21 +7,25 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements Controller {
+public class MainActivity extends AppCompatActivity{
 
-    PersonFragment person = new PersonFragment();
+    private ButtonFragment buttonFragment;
+
     @Override
-    public void onCreate (Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
         setContentView(R.layout.activity_main);
-    }
 
-    @Override
-    public void person(int position, ArrayList<String> person, ArrayList<String> age) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        this.person = (PersonFragment) fragmentManager.findFragmentById(R.id.person);
-        this.person.person(position, person, age);
+        // default to our containter fragment.
+        // on button2 click, we need to swap out the fragment with another...
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.containerFragment, new ContainerFragment())
+                .commit();
+
+        buttonFragment = (ButtonFragment)getSupportFragmentManager()
+                .findFragmentById(R.id.buttonFragment);
+        buttonFragment.setButtonText("People", "Other");
+        buttonFragment.setOnButtonClick(this);
     }
 }
