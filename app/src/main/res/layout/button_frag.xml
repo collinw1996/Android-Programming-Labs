@@ -5,12 +5,17 @@
 
     <Button
         android:id="@+id/button_frag_btn_1"
+        android:text="Person"
+        android:textSize="24sp"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 
     <Button
         android:id="@+id/button_frag_btn_2"
+        android:text="Other"
+        android:textSize="24sp"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content" />

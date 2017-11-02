@@ -7,7 +7,7 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements ButtonController{
 
     private ButtonFragment buttonFragment;
 
@@ -16,8 +16,6 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // default to our containter fragment.
-        // on button2 click, we need to swap out the fragment with another...
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.containerFragment, new ContainerFragment())
@@ -25,7 +23,22 @@ public class MainActivity extends AppCompatActivity{
 
         buttonFragment = (ButtonFragment)getSupportFragmentManager()
                 .findFragmentById(R.id.buttonFragment);
-        buttonFragment.setButtonText("People", "Other");
-        buttonFragment.setOnButtonClick(this);
+        buttonFragment.setBtnText("People", "Other");
+    }
+
+    @Override
+    public void button1() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.containerFragment, new ContainerFragment())
+                .commit();
+    }
+
+    @Override
+    public void button2() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.containerFragment, new HelloFragment())
+                .commit();
     }
 }

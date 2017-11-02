@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 
-public class PagerActivity extends AppCompatActivity {
+public class PagerActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
     ViewPager viewPager;
     TabLayout tabLayout;
@@ -19,25 +19,42 @@ public class PagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pager);
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         tabLayout = (TabLayout)findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
-        viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
+        tabLayout.addTab(tabLayout.newTab().setText("Person"));
+        tabLayout.addTab(tabLayout.newTab().setText("Other"));
+        viewPager.setAdapter(new MyAdapter(getSupportFragmentManager(), tabLayout.getTabCount()));
+        tabLayout.addOnTabSelectedListener(this);
     }
 
     @Override
     public void onBackPressed() {
-        // nav back to the first tab if not on the first tab
-        // if on the first tab, go back
         if(viewPager.getCurrentItem() < 1)
             super.onBackPressed();
         else
             viewPager.setCurrentItem(0);
     }
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
     class MyAdapter extends FragmentPagerAdapter {
 
-        public MyAdapter(FragmentManager fm) {
+        int tabCount;
+
+        public MyAdapter(FragmentManager fm, int tabCount) {
             super(fm);
+            this.tabCount = tabCount;
         }
 
         @Override
@@ -53,7 +70,7 @@ public class PagerActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 2;
+            return tabCount;
         }
 
         @Override

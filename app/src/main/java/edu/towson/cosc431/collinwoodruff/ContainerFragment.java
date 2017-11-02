@@ -30,7 +30,7 @@ public class ContainerFragment extends Fragment implements PersonListFragment.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.person_list_fragment, container, false);
+        View view = inflater.inflate(R.layout.person_fragment, container, false);
         return view;
     }
 
@@ -48,8 +48,8 @@ public class ContainerFragment extends Fragment implements PersonListFragment.On
                 .findFragmentById(R.id.person);
         peopleFragment = (PersonListFragment)getChildFragmentManager()
                 .findFragmentById(R.id.personlist);
-//        peopleFragment.setPeople(people);
-//        peopleFragment.setPersonSelectedListener(this);
+        peopleFragment.setPeople(people);
+        peopleFragment.setPersonSelectedListener(this);
     }
 
     private List<Person> makePeople() {
