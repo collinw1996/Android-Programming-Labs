@@ -1,13 +1,22 @@
 package edu.towson.cosc431.collinwoodruff.labs;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import edu.towson.cosc431.collinwoodruff.labs.database.DatabaseContract;
+import edu.towson.cosc431.collinwoodruff.labs.database.SongsDBHelper;
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
 
 /**
@@ -22,7 +31,6 @@ public class AddSong extends AppCompatActivity implements View.OnClickListener, 
     Button addBtn;
     CheckBox awesome;
     Song song;
-    boolean flag = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState){

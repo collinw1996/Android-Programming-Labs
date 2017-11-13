@@ -3,6 +3,8 @@ package edu.towson.cosc431.collinwoodruff.labs.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.UUID;
+
 /**
  * Created by Collin on 9/24/2017.
  */
@@ -12,16 +14,26 @@ public class Song implements Parcelable{
     private String artist;
     private int track;
     private boolean isAwesome;
+    private String _id;
 
     public Song(String name, String artist, int track, boolean isAwesome){
         this.name = name;
         this.artist = artist;
         this.track = track;
         this.isAwesome = isAwesome;
+        this._id = UUID.randomUUID().toString();
     }
 
     public Song(){
 
+    }
+
+    public String getId() {
+        return _id;
+    }
+
+    public void setId(String _id) {
+        this._id = _id;
     }
 
     public String getName() {
@@ -75,6 +87,7 @@ public class Song implements Parcelable{
         out.writeString(artist);
         out.writeInt(track);
         out.writeByte((byte) (isAwesome ? 1 : 0)); //if isAwesome == true, byte == 1
+        out.writeString(_id);
     }
 
     public static final Parcelable.Creator<Song> CREATOR = new Parcelable.Creator<Song>() {
@@ -92,6 +105,7 @@ public class Song implements Parcelable{
         artist = in.readString();
         track = in.readInt();
         isAwesome = in.readByte() != 0; //isAwesome == true if byte != 0
+        _id = in.readString();
     }
 
 }

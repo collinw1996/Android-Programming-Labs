@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lab5_CollinWoodruff</string>
+    <string name="app_name">Lab9_CollinWoodruff</string>
     <string name="name">Name:</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
@@ -15,4 +15,5 @@
     <string name="songName">SongName</string>
     <string name="artistName">ArtistName</string>
     <string name="trackNum">TrackNum</string>
+    <string name="viewBtn">View Data</string>
 </resources>

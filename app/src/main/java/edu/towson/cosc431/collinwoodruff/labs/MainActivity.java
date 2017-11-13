@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.towson.cosc431.collinwoodruff.labs.adapter.SongAdapter;
+import edu.towson.cosc431.collinwoodruff.labs.database.SongDataSource;
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, IView {
@@ -26,13 +27,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button addBtn;
     private SongAdapter adapter;
     IPresenter presenter;
-    Song song;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new MainPresenter(this, new SongsModel());
+        presenter = new MainPresenter(this, new SongsModel(SongDataSource.getInstance(this)));
         bindView();
     }
 
@@ -54,37 +54,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //// Interface implementations ////
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ADD_SONG_REQUEST_CODE:
-                    song = (Song)data.getParcelableExtra("SONG");
+                    Song song = (Song)data.getParcelableExtra("SONG");
                     presenter.handleNewSongResult(song);
                     refresh();
                     break;
                 case EDIT_SONG_REQUEST_CODE:
                     song = (Song) data.getParcelableExtra("EDIT");
                     presenter.handleEditSongResult(song);
+                    refresh();
                     break;
             }
         }
     }
 
+
     @Override
     public void refresh() {
+        recyclerView.setAdapter(new SongAdapter(presenter.getSongsFromModel(), presenter));
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void launchNewSong() {
-        Intent intent = new Intent(this, AddSong.class);
+        Intent intent = new Intent(getBaseContext(), AddSong.class);
         startActivityForResult(intent, ADD_SONG_REQUEST_CODE);
     }
 
     @Override
-    public void launchEditSong(Song song){
+    public void launchEditSong(Song song) {
         Intent intent = new Intent(this, EditSong.class);
         intent.putExtra("EDIT" , song);
         startActivityForResult(intent, EDIT_SONG_REQUEST_CODE);
