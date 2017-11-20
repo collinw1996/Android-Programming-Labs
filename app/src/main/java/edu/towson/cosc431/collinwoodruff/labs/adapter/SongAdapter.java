@@ -1,5 +1,6 @@
 package edu.towson.cosc431.collinwoodruff.labs.adapter;
 
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,13 @@ import edu.towson.cosc431.collinwoodruff.labs.model.Song;
 
 public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
 
+    private final Handler handler;
     List<Song> songs;
     Controller controller;
-    public SongAdapter(List<Song> songs, Controller controller) {
+    public SongAdapter(List<Song> songs, Controller controller, Handler handler) {
         this.songs = songs;
         this.controller = controller;
+        this.handler = handler;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
     @Override
     public void onBindViewHolder(SongViewHolder holder, int position) {
         Song song = songs.get(position);
-        holder.bindSong(song);
+        holder.bindSong(song, handler);
     }
 
     @Override

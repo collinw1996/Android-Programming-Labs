@@ -35,16 +35,6 @@ public class SongView {
     public SongView(final Controller controller, LinearLayout layout){
         this.controller = controller;
         this.layout = layout;
-        this.name = (TextView) layout.findViewById(R.id.songName);
-        this.name.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                SongView.this.controller.editSong(current);
-            }
-        });
-        this.artist = (TextView) layout.findViewById(R.id.songArtist);
-        this.track = (TextView) layout.findViewById(R.id.songTrack);
         this.awesome = (CheckBox) layout.findViewById(R.id.isAwesome);
         this.delete = (Button)layout.findViewById(R.id.deleteButton);
         this.delete.setOnClickListener(new View.OnClickListener() {

@@ -1,6 +1,7 @@
 package edu.towson.cosc431.collinwoodruff.labs;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,8 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import edu.towson.cosc431.collinwoodruff.labs.adapter.SongAdapter;
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
@@ -34,6 +37,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         songs = new ArrayList<>();
         addSongs();
         actions();
+
+        Executor executor = (Executor) Executors.newFixedThreadPool(1);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("Lab11", JsonDownloader.downloadJson());
+            }
+        });
     }
 
     private void actions(){
@@ -41,7 +52,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addBtn.setOnClickListener(this);
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SongAdapter(songs, (Controller)this);
+
+        Handler handler = new Handler();
+        adapter = new SongAdapter(songs, (Controller)this, handler);
         recyclerView.setAdapter(adapter);
     }
 
