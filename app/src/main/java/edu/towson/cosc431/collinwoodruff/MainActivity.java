@@ -1,27 +1,45 @@
 package edu.towson.cosc431.collinwoodruff;
 
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
+public class MainActivity extends AppCompatActivity implements Fragment1.OnStartButtonListener, Fragment2.OnFinishButtonListener {
 
-public class MainActivity extends AppCompatActivity implements Controller {
-
-    PersonFragment person = new PersonFragment();
+    Fragment1 firstFragment;
+    Fragment2 secondFragment;
     @Override
     public void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
         setContentView(R.layout.activity_main);
+
+        firstFragment = new Fragment1();
+        secondFragment = new Fragment2();
+
+        firstFragment.setOnStartButtonListener(this);
+        secondFragment.setOnFinishButtonListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.container, firstFragment)
+                .commit();
+
     }
 
     @Override
-    public void person(int position, ArrayList<String> person, ArrayList<String> age) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        this.person = (PersonFragment) fragmentManager.findFragmentById(R.id.person);
-        this.person.person(position, person, age);
+    public void onStartButtonClicked(String result) {
+        Log.d("MainActivity" , result);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, secondFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onFinishButtonClicked() {
+        getSupportFragmentManager()
+                .popBackStack();
     }
 }

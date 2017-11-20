@@ -4,16 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment android:name="edu.towson.cosc431.collinwoodruff.PersonFragment"
-        android:id="@+id/person"
-        android:layout_weight="1"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <fragment android:name="edu.towson.cosc431.collinwoodruff.PersonListFragment"
-        android:id="@+id/personlist"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 </LinearLayout>
