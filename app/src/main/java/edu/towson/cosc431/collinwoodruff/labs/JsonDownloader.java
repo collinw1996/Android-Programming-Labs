@@ -20,7 +20,7 @@ public class JsonDownloader {
     public static String downloadJson() {
         URL url = null;
         try {
-            url = new URL(API + "/users");
+            url = new URL(API + "/posts/1");
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("GET");
             InputStream stream = connection.getInputStream();

@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 
 import edu.towson.cosc431.collinwoodruff.labs.adapter.SongAdapter;
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
+import edu.towson.cosc431.collinwoodruff.labs.services.JsonService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Controller {
 
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SongAdapter adapter;
     List<Song> songs;
     RecyclerView recyclerView;
-    Button addBtn;
+    Button addBtn, serviceBtn;
     int position;
     boolean flag;
 
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void actions(){
         addBtn = (Button)findViewById(R.id.addBtn);
         addBtn.setOnClickListener(this);
+        serviceBtn = (Button)findViewById(R.id.serviceBtn);
+        serviceBtn.setOnClickListener(this);
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -69,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()){
             case R.id.addBtn:
                 addSong();
+                break;
+            case R.id.serviceBtn:
+                startService(new Intent(this, JsonService.class));
                 break;
         }
     }
