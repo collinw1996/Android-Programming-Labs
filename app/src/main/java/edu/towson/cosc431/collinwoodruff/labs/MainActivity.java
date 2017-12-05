@@ -1,14 +1,22 @@
 package edu.towson.cosc431.collinwoodruff.labs;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +25,62 @@ import java.util.concurrent.Executors;
 
 import edu.towson.cosc431.collinwoodruff.labs.adapter.SongAdapter;
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
+import edu.towson.cosc431.collinwoodruff.labs.receivers.TodoReceiver;
 import edu.towson.cosc431.collinwoodruff.labs.services.JsonService;
+import edu.towson.cosc431.collinwoodruff.labs.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Controller {
 
     private static final int ADD_SONG_REQUEST_CODE = 1;
     private static final int EDIT_SONG_REQUEST_CODE = 2;
 
+    TextView title2;
+    TextView body2;
     private SongAdapter adapter;
     List<Song> songs;
     RecyclerView recyclerView;
     Button addBtn, serviceBtn;
     int position;
     boolean flag;
+    BroadcastReceiver todoReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            addBtn.setText("HELLO WORLD");
+        }
+    };
+
+    IntentFilter newTodoMsg = new IntentFilter("NEW_TODO");
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.settings_menu:
+                // launch settings activity
+                startActivity(new Intent(this, SettingsActivity.class));
+            break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(todoReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(todoReceiver, newTodoMsg );
+        startService(new Intent(this, JsonService.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         songs = new ArrayList<>();
         addSongs();
         actions();
+
+        todoReceiver = new TodoReceiver();
 
         Executor executor = (Executor) Executors.newFixedThreadPool(1);
         executor.execute(new Runnable() {
@@ -82,6 +135,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void logSongs(){
         for(Song song : songs)
             Log.d("Tag", song.toString());
+    }
+
+    public void updateUI(String title, String body){
+        title2 = (TextView)findViewById(R.id.songName);
+        body2 = (TextView) findViewById(R.id.artistName);
+        title2.setText(title);
+        body2.setText(body);
     }
 
     @Override

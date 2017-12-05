@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <PreferenceCategory>
+        <CheckBoxPreference
+            android:key="check_on_boot"
+            android:title="Check on Boot"
+            android:summary="Check for new Todos on boot"
+            >
+
+        </CheckBoxPreference>
+        <ListPreference
+            android:key="interval"
+            android:title="New Todo check interval"
+            android:entries="@array/interval_display"
+            android:entryValues="@array/interval_values"
+            android:summary="How often to check for new Todos"
+            android:dialogTitle="Interval"
+            >
+
+        </ListPreference></PreferenceCategory>
+</PreferenceScreen>

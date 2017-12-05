@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -40,23 +41,42 @@ public class JsonService extends IntentService {
         catch (InterruptedException e){
             e.printStackTrace();
         }
-        String json = JsonDownloader.downloadJson();
-        Log.d(JsonService.class.getSimpleName(), json);
-        builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(android.R.drawable.ic_input_add);
-
+        //broadcast the new todo message or intent
+        Intent newTodoIntent = new Intent("NEW_TODO");
+        //put json in the intent
+        String todo = JsonDownloader.downloadJson();
         try {
-            JSONObject object = new JSONObject(json);
-            builder.setContentText(object.getString("body"));
-            builder.setContentTitle(object.getString("title"));
+            JSONObject object = new JSONObject(todo);
+            newTodoIntent.putExtra("TITLE", object.getString("title"));
+            newTodoIntent.putExtra("BODY", object.getString("body"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        builder.setAutoCancel(true);
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, mainActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        notification = builder.build();
-        NotificationManagerCompat.from(this).notify(1, notification);
+
+        // If the UI is visible update the UI with the JSON
+        boolean success = LocalBroadcastManager.getInstance(this).sendBroadcast(newTodoIntent);
+
+        // If the UI is not visible display a notification
+        if(!success) {
+            //show notification
+            String json = JsonDownloader.downloadJson();
+            Log.d(JsonService.class.getSimpleName(), json);
+            builder = new NotificationCompat.Builder(this);
+            builder.setSmallIcon(android.R.drawable.ic_input_add);
+
+            try {
+                JSONObject object = new JSONObject(json);
+                builder.setContentText(object.getString("body"));
+                builder.setContentTitle(object.getString("title"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            builder.setAutoCancel(true);
+            Intent mainActivityIntent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, mainActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(pendingIntent);
+            notification = builder.build();
+            NotificationManagerCompat.from(this).notify(1, notification);
+        }
     }
 }

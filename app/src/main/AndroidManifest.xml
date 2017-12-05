@@ -23,6 +23,20 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".EditSong"
             android:screenOrientation="portrait"></activity>
+        <receiver android:name=".receivers.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BATTERY_LOW"></action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receivers.TodoReceiver" android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+        </intent-filter>
+        </receiver>
+        <service android:name=".services.JsonService"/>
+        <activity android:name=".settings.SettingsActivity"/>
     </application>
 
 </manifest>

@@ -19,6 +19,8 @@ import edu.towson.cosc431.collinwoodruff.labs.R;
 import edu.towson.cosc431.collinwoodruff.labs.model.Song;
 
 public class SongViewHolder extends RecyclerView.ViewHolder {
+    TextView title;
+    TextView body;
     ImageView imageView;
     ProgressBar progressBar;
     CheckBox isAwesome;
@@ -29,6 +31,8 @@ public class SongViewHolder extends RecyclerView.ViewHolder {
     public SongViewHolder(View itemView, final Controller controller) {
         super(itemView);
         this.controller = controller;
+        title = (TextView) itemView.findViewById(R.id.songName);
+        body = (TextView) itemView.findViewById(R.id.artistName);
         imageView = (ImageView)itemView.findViewById(R.id.imageView);
         progressBar = (ProgressBar)itemView.findViewById(R.id.progressBar);
         isAwesome = (CheckBox) itemView.findViewById(R.id.isAwesome);
@@ -48,6 +52,8 @@ public class SongViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindSong(Song song, final Handler handler) {
+        title.setText("Empty");
+        body.setText("Empty");
         isAwesome.setChecked(song.isAwesome());
         this.song = song;
         final ImageService service = ImageService.getInstance();
